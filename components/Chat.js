@@ -1,16 +1,12 @@
 import React from "react";
-import {
-  View,
-  ImageBackground,
-  KeyboardAvoidingView,
-  Platform,
-  Text,
-  FlatList,
-} from "react-native";
+import { KeyboardAvoidingView, Platform, Text, Button } from "react-native";
 
 import { GiftedChat, Bubble } from "react-native-gifted-chat";
-import firebase from "firebase"; //import firebase to fetch the data from firebase Database
-import firestore from "firebase";
+import firebase from "firebase"; //import firebase to fetch the data from firebase Database is giving me an error I Can't solve
+import AsyncStorage from "@react-native-community/async-storage";
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import NetInfo from "@react-native-community/netinfo";
 
 export default class Chat extends React.Component {
   constructor(props) {
@@ -40,6 +36,44 @@ export default class Chat extends React.Component {
 
     this.referenceChatMessagesUser = null;
   }
+
+  // AsyncStorage code
+   //this function get messages locally stored using getItem asynchronously
+   async getMessages() {
+     let messages = "";
+     try {
+       messages = (await AsyncStorage.getItem("messages")) || [];
+       this.setState({
+         messages: JSON.parse(messages),
+       });
+     } catch (error) {
+       console.log(error.message);
+     }
+   }
+
+   //this function save messages locally using setItem asynchronously
+   async saveMessages() {
+     try {
+       await AsyncStorage.setItem(
+         "messages",
+         JSON.stringify(this.state.messages)
+       );
+     } catch (error) {
+       console.log(error.message);
+     }
+   }
+
+   //this function delete messages locally using removeItem asynchronously
+   async deleteMessages() {
+     try {
+       await AsyncStorage.removeItem("messages");
+       this.setState({
+         messages: [],
+       });
+     } catch (error) {
+       console.log(error.message);
+     }
+   }
 
 
   componentDidMount() {
