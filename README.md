@@ -81,3 +81,58 @@ Setting Up your Firebase Database configuration
 ● select the location of Cloud Firestore.
 
 ● Hit "Start Collection" and give it the name "messages", press "auto-id" and confirm the selections on the following screen.
+
+Getting the firebaseCredentials to be added to your project
+● Under the General tab, you’ll find a section called Your apps, which is where you can generate configurations for different platforms.
+
+● Click the Firestore for Web button (it may be shown as the </> icon).
+
+● Fill in a name for your chat application (e.g., “my_chat_app”), then click Register to generate the configuration code, you will see something like this:
+
+<script>
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  
+  var firebaseConfig = {
+    apiKey: "your_apiKey",
+    authDomain: "yout_authDomain",
+    projectId: "yout_ProjectId",
+    storageBucket: "your_storageBucket",
+    messagingSenderId: "your_messagingSenderId",
+    appId: "your_appId",
+    measurementId: "Your_measurementId"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+</script>
+inside Chat.js add your credential inside the constructor
+export default class Chat extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      messages: [],
+      user: {
+        _id: 1,
+        name: "Manpreet",
+        avatar: "https://placeimg.com/140/140/any",
+      },
+      uid: 0,
+      loggedInText: "Please wait, you are getting logged in",
+      isConnected: false,
+      image: null,
+    };
+    if (!firebase.apps.length) {
+      // firebase credentials
+      firebase.initializeApp({
+        apiKey: "AIzaSyDSgFiVJ2933nxF9SBotfer6C_wsvC68uo",
+        authDomain: "lets-chat-1657c.firebaseapp.com",
+        projectId: "lets-chat-1657c",
+        storageBucket: "lets-chat-1657c.appspot.com",
+        messagingSenderId: "917168535481",
+        appId: "1:917168535481:web:5096ef425ea8385a99e868",
+        measurementId: "G-F53M525R80",
+      });
+    }
+    this.referenceChatMessagesUser = null;
+  }
